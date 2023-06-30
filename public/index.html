@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="./sytle.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('newWeatherData', (weatherData) => {
+            document.getElementById('altitude').textContent = weatherData.altitude;
+            document.getElementById('gas').textContent = weatherData.gas;
+            document.getElementById('humidity').textContent = weatherData.humidity;
+            document.getElementById('pressure').textContent = weatherData.pressure;
+            document.getElementById('temperature').textContent = weatherData.temperature;
+        });
+
+        function speakTemperature() {
+            const temperature = document.getElementById('temperature').textContent;
+            const speechSynthesis = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(`The current temperature is ${temperature} degrees Celsius`);
+            speechSynthesis.speak(utterance);
+        }
+    </script>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <div class="weather-card">
+        <div class="weather-card__item">
+            <i class="fas fa-mountain weather-card__icon"></i>
+            <span class="weather-card__label">Altitude:</span>
+            <span id="altitude" class="weather-card__value">-</span>
+        </div>
+        <div class="weather-card__item">
+            <i class="fas fa-cloud weather-card__icon"></i>
+            <span class="weather-card__label">Gas:</span>
+            <span id="gas" class="weather-card__value">-</span>
+        </div>
+        <div class="weather-card__item">
+            <i class="fas fa-tint weather-card__icon"></i>
+            <span class="weather-card__label">Humidity:</span>
+            <span id="humidity" class="weather-card__value">-</span>
+        </div>
+        <div class="weather-card__item">
+            <i class="fas fa-chart-line weather-card__icon"></i>
+            <span class="weather-card__label">Pressure:</span>
+            <span id="pressure" class="weather-card__value">-</span>
+        </div>
+        <div class="weather-card__item">
+            <i class="fas fa-thermometer-half weather-card__icon"></i>
+            <span class="weather-card__label">Temperature:</span>
+            <span id="temperature" class="weather-card__value">-</span>
+        </div>
+        <button onclick="speakTemperature()">Speak Temperature</button>
+    </div>
+</body>
+</html>
